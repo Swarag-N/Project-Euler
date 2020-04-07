@@ -36,6 +36,7 @@ def  rowWiseMaxProduct(row,n):
             tempProduct=soln
     return tempProduct
 
+
 def matrixInverse(matrix):
     m = len(matrix)
     n = len(matrix[0])
@@ -47,6 +48,7 @@ def matrixInverse(matrix):
         temp.append(tempRow)
     return temp            
 
+
 def genratingDaigonals(matrix,n):
     tempProduct = float("-inf")
     for i in range(len(matrix)-n+1):
@@ -55,23 +57,36 @@ def genratingDaigonals(matrix,n):
             for z in range(n):
                 temp.append(matrix[i+z][j+z])
             tempArrProduct = product(temp)
-            if tempArrProduct>tempProduct:
-                tempProduct=tempArrProduct
-    
+            tempProduct = max(tempArrProduct,tempProduct)
     return tempProduct
+
         
+def genratingDaigonalsReverse(matrix,n):
+    tempProduct = float("-inf")
+    for i in range(len(matrix)-1,n,-1):
+        for j in range(len(matrix)-n+1):
+            temp = []
+            for z in range(n):
+                temp.append(matrix[i-z][j+z])
+            tempArrProduct = product(temp)
+            tempProduct = max(tempArrProduct,tempProduct)
+    return tempProduct
 
 
 diagonalAns = genratingDaigonals(data,4)
-print(diagonalAns)
-for row in data:
-    ans = rowWiseMaxProduct(row,4)
-print(ans)
+diagonalReverseAns = genratingDaigonalsReverse(data,4)
 
+
+maxProductRow = float('-inf')
+for row in data:
+    rowAns = rowWiseMaxProduct(row,4)
+    maxProductRow = max(rowAns,maxProductRow)
+
+maxProductCol = float('-inf')
 inverseData = matrixInverse(data)
 for row in inverseData:
-    ans = rowWiseMaxProduct(row,4)
-print(ans)
+    colAns = rowWiseMaxProduct(row,4)
+    maxProductCol=max(colAns,maxProductCol)
 
-diagonalAns = genratingDaigonals(inverseData,4)
-print(diagonalAns)
+
+print(max(diagonalAns,diagonalReverseAns,maxProductCol,maxProductRow))
